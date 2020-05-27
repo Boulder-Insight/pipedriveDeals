@@ -10,59 +10,13 @@
     // Define the schema
     myConnector.getSchema = function(schemaCallback) {
         var arg = JSON.parse(tableau.connectionData);
-        if (arg.selected == "summary?") {
-            //schema for summary function
-            var cols = [{
-                id: "total_count",
-                dataType: tableau.dataTypeEnum.int
-            }, {
-                id: "total_currency_converted_value_formatted",
-                alias: "value",
-                dataType: tableau.dataTypeEnum.string
-            }, {
-                id: "total_weighted_currency_converted_value_formatted",
-                alias: "weighted_value",
-                dataType: tableau.dataTypeEnum.string
-            }];
-            
-            var tableSchema = {
-                id: "pipedriveDealSummary",
-                alias: "Summary of all deals within criteria",
-                columns: cols
-            };
-
-        } else {
-            //schema for timeline function
-            var cols = [{
-                id: "period_start",
-                dataType: tableau.dataTypeEnum.datetime
-            }, {
-                id: "period_end",
-                dataType: tableau.dataTypeEnum.datetime
-            }, {
-                id: "id",
-                dataType: tableau.dataTypeEnum.int
-            }, {
-                id: "add_time",
-                dataType: tableau.dataTypeEnum.string
-            }, {
-                id: "active",
-                dataType: tableau.dataTypeEnum.bool
-            }, {
-                id: "formatted_value",
-                dataType: tableau.dataTypeEnum.string
-            }];
-
-            var tableSchema = {
-                id: "pipedriveDealTimeline",
-                alias: "Timeline of deals divided into blocks of time",
-                columns: cols
-            };
+        //schemas were getting large so I made a seperate schema file titled pipedriveSchemas.js
+        cols = schema(arg.selected)
+        var tableSchema = {
+            id: "pipedriveDealTimeline",
+            alias: "Timeline of deals divided into blocks of time",
+            columns: cols
         };
-
-
-        
-
         schemaCallback([tableSchema]);
     };
 
@@ -92,6 +46,8 @@
                 //value assignment for summary function
                 tableData.push({
                     "total_count": feat.total_count,
+                    "total_currency_converted_value": feat.total_currency_converted_value,
+                    "total_weighted_currency_converted_value": feat.total_weighted_currency_converted_value,
                     "total_currency_converted_value_formatted": feat.total_currency_converted_value_formatted,
                     "total_weighted_currency_converted_value_formatted": feat.total_weighted_currency_converted_value_formatted
                 });
@@ -107,14 +63,49 @@
                         });
                     };
                     //Iterate over the inner blocks of deals within each specified block of time
+                    //this giant block of code gives me pain, but idk any other way
                     for (var j = 0, lenj = feat[i].deals.length; j < lenj; j++) {
                         tableData.push({
                             "period_start": feat[i].period_start,
                             "period_end": feat[i].period_end,
                             "id": feat[i].deals[j].id,
+                            "creator_user_id": feat[i].deals[j].creator_user_id,
+                            "user_id": feat[i].deals[j].user_id,
+                            "person_id": feat[i].deals[j].person_id,
+                            "org_id": feat[i].deals[j].org_id,
+                            "stage_id": feat[i].deals[j].stage_id,
+                            "title": feat[i].deals[j].title,
+                            "value": feat[i].deals[j].value,
                             "add_time": feat[i].deals[j].add_time,
+                            "update_time": feat[i].deals[j].update_time,
                             "active": feat[i].deals[j].active,
-                            "formatted_value": feat[i].deals[j].formatted_value
+                            "status": feat[i].deals[j].status,
+                            "probability": feat[i].deals[j].probability,
+                            "last_activity_id": feat[i].deals[j].last_activity_id,
+                            "last_activity_date": feat[i].deals[j].last_activity_date,
+                            "pipeline_id": feat[i].deals[j].pipeline_id,
+                            "won_time": feat[i].deals[j].won_time,
+                            "first_won_time": feat[i].deals[j].first_won_time,
+                            "lost_time": feat[i].deals[j].lost_time,
+                            "notes_count": feat[i].deals[j].notes_count,
+                            "email_messages_count": feat[i].deals[j].email_messages_count,
+                            "activities_count": feat[i].deals[j].activities_count,
+                            "done_activities_count": feat[i].deals[j].done_activities_count,
+                            "undone_activities_count": feat[i].deals[j].undone_activities_count,
+                            "reference_activities_count": feat[i].deals[j].reference_activities_count,
+                            "participants_count": feat[i].deals[j].participants_count,
+                            "expected_close_date": feat[i].deals[j].expected_close_date,
+                            "last_incoming_mail_time": feat[i].deals[j].last_incoming_mail_time,
+                            "last_outgoing_mail_time": feat[i].deals[j].last_outgoing_mail_time,
+                            "stage_order_nr": feat[i].deals[j].stage_order_nr,
+                            "person_name": feat[i].deals[j].person_name,
+                            "org_name": feat[i].deals[j].org_name,
+                            "formatted_value": feat[i].deals[j].formatted_value,
+                            "weighted_value": feat[i].deals[j].weighted_value,
+                            "formatted_weighted_value": feat[i].deals[j].formatted_weighted_value,
+                            "rotten_time": feat[i].deals[j].rotten_time,
+                            "owner_name": feat[i].deals[j].owner_name,
+                            "cc_email": feat[i].deals[j].cc_email
                         });
                     };
                 };
