@@ -1,0 +1,86 @@
+<html>
+<head>
+    <title>PipeDrive deals</title>
+    <meta http-equiv="Cache-Control" content="no-store" />
+    
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" type="text/javascript"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    
+    <script src="https://connectors.tableau.com/libs/tableauwdc-2.3.latest.js" type="text/javascript"></script>
+    <script src="pipedrive.js" type="text/javascript"></script>
+</head>
+
+<body style="background-color:#ebf1f2;">
+    <div class="container container-table">
+        <div class="row vertical-center-row">
+            <div class="text-left col-md-4 col-md-offset-4">
+                <form>
+                    <section>
+                        <div style="float:left;margin-right:20px;">
+                            <label for="key">API key</label>
+                            <input type="int" class="form-control" id="key" value="">
+                            <!--This block controls if timeline or summary is called-->
+                            <label for="selector">Function:</label>
+                            <select name="selector" id="selector" class="form-control">
+                                <option value="summary?">Summary</option>
+                                <option value="timeline?">Timeline</option>
+                            </select>
+                            
+                            <!--This block controls all of the arguments for the summary function-->
+                            <div id="summary">
+                                <label for="summary_status">Status:</label>
+                                <select name="summary_status" id="summary_status" class="form-control">
+                                    <option value="open">Open</option>
+                                    <option value="won">Won</option>
+                                    <option value="lost">Lost</option>
+                                </select>
+
+                                <label for="summary_filter">Filter ID (optional)</label>
+                                <input type="text" class="form-control" id="summary_filter" value="">
+
+                                <label for="summary_user">User ID (optional)</label>
+                                <input type="text" class="form-control" id="summary_user" value="">
+
+                                <label for="summary_stage">Stage ID (optional)</label>
+                                <input type="text" class="form-control" id="summary_stage" value="">
+                            </div>
+
+                            <!--This block controls all of the arguments for the timeline function-->
+                            <div id="timeline" style="display:none">
+                                <label for="timeline_startDate">Start Date (YYYY-MM-DD):</label>
+                                <input type="text" class="form-control" id="timeline_startDate" value="2020-01-01">
+
+                                <label for="timeline_increment">Increment:</label>
+                                <select name="timeline_increment" id="timeline_increment" class="form-control">
+                                    <option value="day">Day</option>
+                                    <option value="week">Week</option>
+                                    <option value="month">Month</option>
+                                    <option value="quarter">Quarter</option>
+                                </select>
+
+                                <label for="timeline_amount">Number of increments:</label>
+                                <input type="int" class="form-control" id="timeline_amount" value="3">
+
+                                <label for="timeline_user">User ID (optional)</label>
+                                <input type="text" class="form-control" id="timeline_user" value="">
+                             
+                                <label for="timeline_pipeline">Pipeline ID (optional)</label>
+                                <input type="text" class="form-control" id="timeline_pipeline" value="">
+
+                                <label for="timeline_filter">Filter ID (optional)</label>
+                                <input type="text" class="form-control" id="timeline_filter" value="">
+
+                            </div>
+                        </div>
+                    </section>
+                </form>
+                <div>
+                    <button type = "button" id = "submitButton" class = "btn btn-success" style = "margin: 15px;">Submit</button>
+                    <span id="errorMsg" style="color: #f54242; text-align:center; margin: 15px;"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
